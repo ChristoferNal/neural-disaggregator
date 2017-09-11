@@ -63,7 +63,7 @@ def gen_batch(mainchunk, meterchunk, batch_size, index,window_size):
     return X_batch, Y_batch
 
 if __name__ == "__main__":
-    input_window = 50 # Lookback parameter
+    input_window = 200 # Lookback parameter
     train_size = 80639 # The length of the trainset
     key_name = 'fridge'  # The string ID of the meter
     house_keys = [1,2,4] # The buildings used for the train set

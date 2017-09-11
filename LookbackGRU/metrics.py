@@ -10,8 +10,18 @@ def tp_tn_fp_fn(states_pred, states_ground):
 def recall_precision_accuracy_f1(pred, ground,threshold):
     pr = np.array([0 if (p)<threshold else 1 for p in pred])
     gr = np.array([0 if p<threshold else 1 for p in ground])
+    print(pr)
+    print(gr)
 
     tp, tn, fp, fn = tp_tn_fp_fn(pr,gr)
+    print('tp')
+    print(tp)
+    print('tn')
+    print(tn)
+    print('fp')
+    print(fp)
+    print('fn')
+    print(fn)
     p = np.sum(pr)
     n = len(pr) - p
 
