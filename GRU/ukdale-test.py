@@ -14,6 +14,8 @@ test = DataSet('../../Datasets/UKDALE/ukdale.h5')
 
 # train.set_window(start="13-4-2013", end="13-12-2013")
 # test.set_window(start="1-1-2014", end="30-3-2014")
+train.set_window(start="13-4-2013", end="13-12-2013")
+test.set_window(start="1-1-2014", end="30-3-2014")
 
 train.set_window(start="20-5-2013", end="9-7-2013")
 test.set_window(start="10-7-2013", end="10-10-2013")
