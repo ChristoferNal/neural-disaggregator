@@ -12,11 +12,13 @@ print("========== OPEN DATASETS ============")
 train = DataSet('../../Datasets/UKDALE/ukdale.h5')
 test = DataSet('../../Datasets/UKDALE/ukdale.h5')
 
-train.set_window(start="13-4-2013", end="1-1-2014")
-test.set_window(start="1-1-2014", end="30-3-2014")
+# train.set_window(start="13-4-2013", end="1-1-2014")
+# test.set_window(start="1-1-2014", end="30-3-2014")
+train.set_window(start="20-5-2013", end="9-7-2013")
+test.set_window(start="10-7-2013", end="10-10-2013")
 
-train_building = 1
-test_building = 1
+train_building = 2
+test_building = 2
 sample_period = 6
 meter_key = 'kettle'
 train_elec = train.buildings[train_building].elec
@@ -25,7 +27,7 @@ test_elec = test.buildings[test_building].elec
 train_meter = train_elec.submeters()[meter_key]
 train_mains = train_elec.mains()
 test_mains = test_elec.mains()
-rnn = RNNDisaggregator()
+rnn = RNNDisaggregator(True)
 
 
 start = time.time()
