@@ -18,6 +18,7 @@ test.set_window(start="10-9-2013", end="10-10-2013")
 train_building = 2
 test_building = 2
 sample_period = 1
+sample_period = 6
 meter_key = 'fridge'
 train_elec = train.buildings[train_building].elec
 test_elec = test.buildings[test_building].elec
