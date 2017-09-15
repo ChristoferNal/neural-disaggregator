@@ -12,11 +12,14 @@ print("========== OPEN DATASETS ============")
 train = DataSet('../../Datasets/UKDALE/ukdale.h5')
 test = DataSet('../../Datasets/UKDALE/ukdale.h5')
 
-train.set_window(start="13-4-2013", end="13-12-2013")
-test.set_window(start="1-1-2014", end="30-3-2014")
+# train.set_window(start="13-4-2013", end="13-12-2013")
+# test.set_window(start="1-1-2014", end="30-3-2014")
 
-train_building = 1
-test_building = 1
+train.set_window(start="20-5-2013", end="9-7-2013")
+test.set_window(start="10-7-2013", end="10-10-2013")
+
+train_building = 2
+test_building = 2
 sample_period = 6
 meter_key = 'microwave'
 train_elec = train.buildings[train_building].elec
@@ -31,7 +34,7 @@ start = time.time()
 print("========== TRAIN ============")
 epochs = 0
 for i in range(3):
-    gru.train(train_mains, train_meter, epochs=5, sample_period=sample_period)
+    gru.train(train_mains, train_meter, epochs=1, sample_period=sample_period)
     epochs += 5
     gru.export_model("UKDALE-GRU-h{}-{}-{}epochs.h5".format(train_building,
                                                         meter_key,

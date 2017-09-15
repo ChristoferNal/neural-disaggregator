@@ -12,7 +12,7 @@ import h5py
 
 from keras.models import load_model
 from keras.models import Sequential
-from keras.layers import Dense, Conv1D, LSTM, Bidirectional, Dropout
+from keras.layers import Dense, Conv1D, LSTM, Bidirectional, Dropout, Reshape, Embedding
 from keras.utils import plot_model
 
 from nilmtk.utils import find_nearest
@@ -32,13 +32,13 @@ class RNNDisaggregator(Disaggregator):
        the minimum length of an acceptable chunk
     '''
 
-    def __init__(self):
+    def __init__(self, with_embeddings):
         '''Initialize disaggregator
         '''
         self.MODEL_NAME = "LSTM"
         self.mmax = None
         self.MIN_CHUNK_LENGTH = 100
-        self.model = self._create_model()
+        self.model = self._create_model(with_embeddings)
 
     def train(self, mains, meter, epochs=1, batch_size=128, **load_kwargs):
         '''Train
@@ -346,13 +346,35 @@ class RNNDisaggregator(Disaggregator):
         tchunk = chunk * mmax
         return tchunk
 
-    def _create_model(self):
+    def _read_embeddings(self):
+        df = pd.read_csv('energy_embeddings.csv')
+        print('reading embeddings')
+        print(df.head())
+        devices_states = list(df.columns.values)
+        energy_embeddings = df.values
+        energy_embeddings = np.transpose(energy_embeddings)
+        print('Number of embeddings: {}'.format(len(devices_states)))
+        print('Embedding dimension: {}'.format(energy_embeddings[0].size))
+        return devices_states, energy_embeddings
+
+    def _create_model(self, with_embeddings=False):
         '''Creates the RNN module described in the paper
         '''
         model = Sequential()
-
-        # 1D Conv
-        model.add(Conv1D(16, 4, activation="linear", input_shape=(1,1), padding="same", strides=1))
+        print('Using embeddings? ')
+        print(with_embeddings)
+        if with_embeddings:
+            devices_states, energy_embeddings = self._read_embeddings()
+            embedding_dimension = energy_embeddings[0].size
+            model.add(Reshape((1,), input_shape=(1, 1)))
+            model.add(Embedding(len(devices_states),
+                                embedding_dimension,
+                                weights=[energy_embeddings],
+                                trainable=False))
+            model.add(Conv1D(16, 4, activation="tanh", padding="same", strides=1))
+        else:
+            # 1D Conv
+            model.add(Conv1D(16, 4, activation="linear", input_shape=(1,1), padding="same", strides=1))
 
         #Bi-directional LSTMs
         model.add(Bidirectional(LSTM(128, return_sequences=True, stateful=False), merge_mode='concat'))
