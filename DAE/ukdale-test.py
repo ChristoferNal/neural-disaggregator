@@ -15,6 +15,7 @@ test = DataSet('../../Datasets/UKDALE/ukdale.h5')
 train.set_window(start="20-5-2013", end="9-9-2013")
 test.set_window(start="10-9-2013", end="10-10-2013")
 
+<<<<<<< HEAD
 # train.set_window(start="7-7-2015", end="7-12-2015")
 # test.set_window(start="7-12-2015", end="2-2-2016")
 
@@ -22,6 +23,11 @@ train_building = 2
 test_building = 2
 sample_period = 6
 meter_key = 'microwave'
+=======
+train_building = 2
+test_building = 2
+sample_period = 1
+meter_key = 'fridge'
 train_elec = train.buildings[train_building].elec
 test_elec = test.buildings[test_building].elec
 
@@ -38,7 +44,6 @@ print(test_mains)
 print('---------------------------------------------------------------------------')
 dae = DAEDisaggregator(300, False)
 
-
 start = time.time()
 print("========== TRAIN ============")
 epochs = 0
@@ -51,6 +56,8 @@ for i in range(3):
     dae.export_model("UKDALE-DAE-h{}-{}-{}epochs.h5".format(train_building,
                                                         meter_key,
                                                         epochs))
+
+
 end = time.time()
 print("Train =", end-start, "seconds.")
 
