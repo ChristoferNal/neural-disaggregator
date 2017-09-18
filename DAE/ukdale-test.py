@@ -15,10 +15,13 @@ test = DataSet('../../Datasets/UKDALE/ukdale.h5')
 train.set_window(start="20-5-2013", end="9-9-2013")
 test.set_window(start="10-9-2013", end="10-10-2013")
 
+# train.set_window(start="7-7-2015", end="7-12-2015")
+# test.set_window(start="7-12-2015", end="2-2-2016")
+
 train_building = 2
 test_building = 2
-sample_period = 1
-meter_key = 'fridge'
+sample_period = 6
+meter_key = 'microwave'
 train_elec = train.buildings[train_building].elec
 test_elec = test.buildings[test_building].elec
 
@@ -26,21 +29,28 @@ train_meter = train_elec.submeters()[meter_key]
 test_meter = test_elec.submeters()[meter_key]
 train_mains = train_elec.mains()
 test_mains = test_elec.mains()
-dae = DAEDisaggregator(300, True)
+print('---------------------------------------------------------------------------')
+print("train_elec")
+print(train_meter.metadata)
+print('---------------------------------------------------------------------------')
+print("test elec")
+print(test_mains)
+print('---------------------------------------------------------------------------')
+dae = DAEDisaggregator(300, False)
 
 
 start = time.time()
 print("========== TRAIN ============")
 epochs = 0
-dae.train(train_mains, train_meter, epochs=25, sample_period=sample_period)
+# dae.train(train_mains, train_meter, epochs=100, sample_period=sample_period)
 
-# for i in range(3):
-#     print("CHECKPOINT {}".format(epochs))
-#     dae.train(train_mains, train_meter, epochs=10, sample_period=sample_period)
-#     epochs += 5
-#     dae.export_model("UKDALE-DAE-h{}-{}-{}epochs.h5".format(train_building,
-#                                                         meter_key,
-#                                                         epochs))
+for i in range(3):
+    print("CHECKPOINT {}".format(epochs))
+    dae.train(train_mains, train_meter, epochs=5, sample_period=sample_period)
+    epochs += 5
+    dae.export_model("UKDALE-DAE-h{}-{}-{}epochs.h5".format(train_building,
+                                                        meter_key,
+                                                        epochs))
 end = time.time()
 print("Train =", end-start, "seconds.")
 

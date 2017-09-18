@@ -16,19 +16,27 @@ train.set_window(end="30-4-2011")
 test.set_window(start="30-4-2011")
 
 test_building = 1
-meter_key = 'microwave'
+meter_key = 'fridge'
 train_elec = train.buildings[1].elec
 test_elec = test.buildings[test_building].elec
+
+# meter_group = train.buildings[1].elec
+# print("\nMeter Group")
+# print(meter_group)
+# df_all_meters = meter_group.dataframe_of_meters()
+# for col in df_all_meters.columns:
+#     meter = meter_group[col]
+#     print(meter.metadata)
 
 train_meter = train_elec.submeters()[meter_key]
 train_mains = train_elec.mains().all_meters()[0]
 test_mains = test_elec.mains().all_meters()[0]
-dae = DAEDisaggregator(256)
+dae = DAEDisaggregator(256, True)
 
 
 start = time.time()
 print("========== TRAIN ============")
-dae.train(train_mains, train_meter, epochs=5, sample_period=1)
+dae.train(train_mains, train_meter, epochs=50, sample_period=1)
 dae.export_model("model-redd100.h5")
 end = time.time()
 print("Train =", end-start, "seconds.")
@@ -40,6 +48,15 @@ output = HDFDataStore(disag_filename, 'w')
 dae.disaggregate(test_mains, output, train_meter, sample_period=1)
 output.close()
 
+result = DataSet(disag_filename)
+res_elec = result.buildings[1].elec
+predicted = res_elec[meter_key]
+ground_truth = test_elec[meter_key]
+
+import matplotlib.pyplot as plt
+predicted.plot()
+ground_truth.plot()
+plt.show()
 print("========== RESULTS ============")
 result = DataSet(disag_filename)
 res_elec = result.buildings[test_building].elec
