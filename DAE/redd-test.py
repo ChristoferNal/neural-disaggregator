@@ -15,9 +15,13 @@ test = DataSet('../../Datasets/REDD/redd.h5')
 train.set_window(end="30-4-2011")
 test.set_window(start="30-4-2011")
 
+train_building = 1
 test_building = 1
 meter_key = 'fridge'
-train_elec = train.buildings[1].elec
+with_embeddings = False
+epochs = 30
+sample_period = 6
+train_elec = train.buildings[train_building].elec
 test_elec = test.buildings[test_building].elec
 
 # meter_group = train.buildings[1].elec
@@ -31,12 +35,12 @@ test_elec = test.buildings[test_building].elec
 train_meter = train_elec.submeters()[meter_key]
 train_mains = train_elec.mains().all_meters()[0]
 test_mains = test_elec.mains().all_meters()[0]
-dae = DAEDisaggregator(256, True)
+dae = DAEDisaggregator(256, with_embeddings)
 
 
 start = time.time()
 print("========== TRAIN ============")
-dae.train(train_mains, train_meter, epochs=50, sample_period=1)
+dae.train(train_mains, train_meter, epochs=epochs, sample_period=sample_period)
 dae.export_model("model-redd100.h5")
 end = time.time()
 print("Train =", end-start, "seconds.")
@@ -45,8 +49,14 @@ print("Train =", end-start, "seconds.")
 print("========== DISAGGREGATE ============")
 disag_filename = 'disag-out.h5'
 output = HDFDataStore(disag_filename, 'w')
-dae.disaggregate(test_mains, output, train_meter, sample_period=1)
+dae.disaggregate(test_mains, output, train_meter, sample_period=sample_period)
 output.close()
+print("Train building: {}".format(train_building))
+print("Test building: {}".format(test_building))
+print("With Embeddings: {}".format(with_embeddings))
+print("Epochs: {}".format(epochs))
+print("Sample period: {}".format(sample_period))
+print("Device: {}".format(meter_key))
 
 result = DataSet(disag_filename)
 res_elec = result.buildings[1].elec
@@ -64,7 +74,7 @@ rpaf = metrics.recall_precision_accuracy_f1(res_elec[meter_key], test_elec[meter
 print("============ Recall: {}".format(rpaf[0]))
 print("============ Precision: {}".format(rpaf[1]))
 print("============ Accuracy: {}".format(rpaf[2]))
-print("============ F1 Score: {}".format(rpaf[2]))
+print("============ F1 Score: {}".format(rpaf[3]))
 
 print("============ Relative error in total energy: {}".format(metrics.relative_error_total_energy(res_elec[meter_key], test_elec[meter_key])))
 print("============ Mean absolute error(in Watts): {}".format(metrics.mean_absolute_error(res_elec[meter_key], test_elec[meter_key])))

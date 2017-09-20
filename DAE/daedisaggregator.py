@@ -1,6 +1,7 @@
 from __future__ import print_function, division
 from warnings import warn, filterwarnings
 
+from keras import losses
 from matplotlib import rcParams
 import matplotlib.pyplot as plt
 
@@ -385,7 +386,7 @@ class DAEDisaggregator(Disaggregator):
         model.add(Reshape(((sequence_len-0), 8)))
         model.add(Conv1D(1, 4, activation="linear", padding="same", strides=1))
 
-        model.compile(loss='mse', optimizer='sgd')
+        model.compile(loss=losses.mean_squared_error, optimizer='sgd')
         plot_model(model, to_file='model.png', show_shapes=True)
 
         return model
