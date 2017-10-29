@@ -1,5 +1,5 @@
-from daedisaggregator import DAEDisaggregator
-from Experiment import Experiment
+from DAE.daedisaggregator import DAEDisaggregator
+from experiment import Experiment
 
 REDD = '../Datasets/REDD/redd.h5'
 UK_DALE = '../Datasets/UKDALE/ukdale.h5'
