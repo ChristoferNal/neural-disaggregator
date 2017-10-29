@@ -51,12 +51,6 @@ disag_filename = 'disag-out.h5'
 output = HDFDataStore(disag_filename, 'w')
 dae.disaggregate(test_mains, output, train_meter, sample_period=sample_period)
 output.close()
-print("Train building: {}".format(train_building))
-print("Test building: {}".format(test_building))
-print("With Embeddings: {}".format(with_embeddings))
-print("Epochs: {}".format(epochs))
-print("Sample period: {}".format(sample_period))
-print("Device: {}".format(meter_key))
 
 result = DataSet(disag_filename)
 res_elec = result.buildings[1].elec
@@ -78,3 +72,9 @@ print("============ F1 Score: {}".format(rpaf[3]))
 
 print("============ Relative error in total energy: {}".format(metrics.relative_error_total_energy(res_elec[meter_key], test_elec[meter_key])))
 print("============ Mean absolute error(in Watts): {}".format(metrics.mean_absolute_error(res_elec[meter_key], test_elec[meter_key])))
+print("Train building: {}".format(train_building))
+print("Test building: {}".format(test_building))
+print("With Embeddings: {}".format(with_embeddings))
+print("Epochs: {}".format(epochs))
+print("Sample period: {}".format(sample_period))
+print("Device: {}".format(meter_key))
