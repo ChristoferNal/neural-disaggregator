@@ -1,20 +1,21 @@
 from __future__ import print_function, division
-import time
 
-import pandas as pd
-from matplotlib import rcParams
+import os
+import time
 import matplotlib.pyplot as plt
-from nilmtk import DataSet, TimeFrame, MeterGroup, HDFDataStore
-from daedisaggregator import DAEDisaggregator
 import metrics
-import matplotlib.pyplot as plt
+import pandas as pd
+from nilmtk import DataSet, HDFDataStore
 
 
 class Experiment:
     def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end, sample_period, device,
                  with_embeddings, epochs):
+        self.__test_dataset_name = None
         self.__test_dataset = None
         self.__test_building = None
+        self.__test_start = None
+        self.__test_end = None
         self.__train_dataset_name = train_dataset_name
         self.__name = name
         self.__model = disaggregator
@@ -25,14 +26,19 @@ class Experiment:
         self.__with_embeddings = with_embeddings
         self.__epochs = epochs
         self.__train_dataset.set_window(start=start, end=end)
-        self.__train_folder_name = "{}_{}_building{}_dev{}_embed{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building, device,
+        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building, device,
                                                                                           with_embeddings, epochs, start, end)
+        if not os.path.exists(self.__train_folder_name):
+            os.makedirs(self.__train_folder_name)
 
-    def set_test_params(self, test_dataset_path, test_building):
+    def set_test_params(self, test_dataset_path, test_dataset_name, test_building):
+        self.__test_dataset_name = test_dataset_name
         self.__test_dataset = DataSet(test_dataset_path)
         self.__test_building = test_building
 
-    def set_testing_window(self, start, end):
+    def set_testing_window(self, start=None, end=None):
+        self.__test_start = start
+        self.__test_end = end
         self.__test_dataset.set_window(start=start, end=end)
 
     def train_model(self):
@@ -49,8 +55,8 @@ class Experiment:
         print("Train finished in: ", end - start, " seconds.")
 
     def run_experiment(self):
-        predicted, ground_truth = self.__test_model()
-        self.__save_diagram(predicted, ground_truth)
+        self.__test_model()
+        self.__save_diagram()
         self.__save_results()
 
     def __test_model(self):
@@ -62,25 +68,26 @@ class Experiment:
         self.__model.disaggregate(test_mains, output, test_meter, sample_period=self.__sample_period)
         output.close()
 
-        result = DataSet(self.disag_filename)
-        res_elec = result.buildings[self.__test_building].elec
-        predicted = res_elec[self.__meter_key]
-        ground_truth = test_elec[self.__meter_key]
-
-        return predicted, ground_truth
-
     def __get_test_meter(self):
         test_elec = self.__test_dataset.buildings[self.__test_building].elec
         test_meter = test_elec.submeters()[self.__meter_key]
         return test_elec, test_meter
 
-    def __save_diagram(self, predicted, ground_truth, show_plot=False):
-        fig_name = "{}_{}".format(self.__name, self.__meter_key)
+    def __save_diagram(self, show_plot=False):
+        test_elec, _ = self.__get_test_meter()
+        result = DataSet(self.disag_filename)
+        res_elec = result.buildings[self.__test_building].elec
+        predicted = res_elec[self.__meter_key]
+        ground_truth = test_elec[self.__meter_key]
+        fig_name = "{}/{}_{}{}_{}_{}".format(self.__train_folder_name, self.__meter_key, self.__test_dataset_name,
+                                           self.__test_building,
+                                        self.__test_start, self.__test_end)
         predicted.plot()
         ground_truth.plot()
         plt.savefig(fig_name)
         if show_plot:
             plt.show()
+        result.store.close()
 
     def __save_results(self):
         print("========== RESULTS ============")
@@ -89,26 +96,31 @@ class Experiment:
         df_results = pd.DataFrame(columns=columns)
         result = DataSet(self.disag_filename)
         res_elec = result.buildings[self.__test_building].elec
-        test_meter = self.__get_test_meter()
+        _, test_meter = self.__get_test_meter()
         rpaf = metrics.recall_precision_accuracy_f1(res_elec[self.__meter_key], test_meter)
-        df_results["recall"] = rpaf[0]
-        df_results["precision"] = rpaf[1]
-        df_results["accuracy"] = rpaf[2]
-        df_results["f1"] = rpaf[3]
+        index = 0
+        df_results.loc[index, "recall"] = round(rpaf[0], 4)
+        df_results.loc[index, "precision"] = round(rpaf[1], 4)
+        df_results.loc[index, "accuracy"] = round(rpaf[2], 4)
+        df_results.loc[index, "f1"] = round(rpaf[3], 4)
 
         relative_error = metrics.relative_error_total_energy(res_elec[self.__meter_key], test_meter)
-        df_results["rel_error_total_energy"] = relative_error
+        df_results.loc[index, "rel_error_total_energy"] = round(relative_error, 4)
         mean_abs_error = metrics.mean_absolute_error(res_elec[self.__meter_key], test_meter)
-        df_results["mean_abs_error"] = mean_abs_error
+        df_results.loc[index, "mean_abs_error"] = round(mean_abs_error, 4)
 
-        df_results["train_building"] = self.__train_building
-        df_results["test_building"] = self.__test_building
-        df_results["embedings"] = self.__with_embeddings
-        df_results["epochs"] = self.__epochs
-        df_results["sample_period"] = self.__sample_period
-        df_results["device"] = self.__meter_key
+        df_results.loc[index, "train_building"] = self.__train_building
+        df_results.loc[index, "test_building"] = self.__test_building
+        df_results.loc[index, "embedings"] = self.__with_embeddings
+        df_results.loc[index, "epochs"] = self.__epochs
+        df_results.loc[index, "sample_period"] = self.__sample_period
+        df_results.loc[index, "device"] = self.__meter_key
 
-        df_results.to_csv("{}/results_building{}.csv".format(self.__test_building))
+        print(df_results)
+
+        df_results.to_csv("{}/{}_building{}_{}_{}.csv".format(self.__train_folder_name, self.__test_dataset_name,
+                                                              self.__test_building,
+                                                                   self.__test_start, self.__test_end))
 
         print("Recall: {}".format(rpaf[0]))
         print("Precision: {}".format(rpaf[1]))
@@ -122,3 +134,5 @@ class Experiment:
         print("Epochs: {}".format(self.__epochs))
         print("Sample period: {}".format(self.__sample_period))
         print("Device: {}".format(self.__meter_key))
+        result.store.close()
+

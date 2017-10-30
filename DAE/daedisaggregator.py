@@ -339,9 +339,8 @@ class DAEDisaggregator(Disaggregator):
         return tchunk
 
     def _read_embeddings(self):
-        df = pd.read_csv('../embeddings/energy_embeddings.csv')
-        print('reading embeddings')
-        print(df.head())
+        df = pd.read_csv('embeddings/energy_embeddings.csv')
+        print('reading embeddings...')
         devices_states = list(df.columns.values)
         energy_embeddings = df.values
         energy_embeddings = np.transpose(energy_embeddings)
@@ -353,8 +352,7 @@ class DAEDisaggregator(Disaggregator):
         '''Creates the Auto encoder module described in the paper
         '''
         model = Sequential()
-        print('Using embeddings? ')
-        print(with_embeddings)
+        print('Using embeddings? {}'.format(with_embeddings))
         if with_embeddings:
             devices_states, energy_embeddings = self._read_embeddings()
             embedding_dimension = energy_embeddings[0].size
