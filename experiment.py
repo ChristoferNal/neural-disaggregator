@@ -57,7 +57,7 @@ class Experiment:
 
     def run_experiment(self):
         self.__test_model()
-        self.__save_diagram()
+        # self.__save_diagram()
         self.__save_results()
 
     def __test_model(self):
