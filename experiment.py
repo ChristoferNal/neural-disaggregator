@@ -99,6 +99,8 @@ class Experiment:
                    "sample_period", "device",
                    "recall", "precision", "accuracy", "f1", "rel_error_total_energy", "mean_abs_error"]
         df_results = pd.DataFrame(columns=columns)
+        print("Saving results from file:")
+        print(self.disag_filename)
         result = DataSet(self.disag_filename)
         res_elec = result.buildings[self.__test_building].elec
         _, test_meter = self.__get_test_meter()
