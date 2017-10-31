@@ -91,7 +91,7 @@ class Experiment:
 
     def __save_results(self):
         print("========== RESULTS ============")
-        columns = ["train_building", "test_building", "embedings", "epochs", "sample_period", "device",
+        columns = ["train_dataset", "test_dataset", "train_building", "test_building", "embedings", "epochs", "sample_period", "device",
                    "recall", "precision", "accuracy", "f1", "rel_error_total_energy", "mean_abs_error"]
         df_results = pd.DataFrame(columns=columns)
         result = DataSet(self.disag_filename)
@@ -109,6 +109,8 @@ class Experiment:
         mean_abs_error = metrics.mean_absolute_error(res_elec[self.__meter_key], test_meter)
         df_results.loc[index, "mean_abs_error"] = round(mean_abs_error, 4)
 
+        df_results.loc[index, "train_dataset"] = self.__train_dataset_name
+        df_results.loc[index, "test_dataset"] = self.__test_dataset_name
         df_results.loc[index, "train_building"] = self.__train_building
         df_results.loc[index, "test_building"] = self.__test_building
         df_results.loc[index, "embedings"] = self.__with_embeddings
@@ -128,7 +130,9 @@ class Experiment:
         print("F1 Score: {}".format(rpaf[3]))
         print("Relative error in total energy: {}".format(relative_error))
         print("Mean absolute error(in Watts): {}\n".format(mean_abs_error))
+        print("Train dataset: {}".format(self.__train_dataset_name))
         print("Train building: {}".format(self.__train_building))
+        print("Test dataset: {}".format(self.__test_dataset_name))
         print("Test building: {}".format(self.__test_building))
         print("With Embeddings: {}".format(self.__with_embeddings))
         print("Epochs: {}".format(self.__epochs))
