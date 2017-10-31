@@ -18,10 +18,10 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 train_building=1,
                                 start="20-5-2013",
                                 end="31-12-2014",
-                                sample_period=128,
+                                sample_period=6,
                                 device='fridge',
                                 with_embeddings=use_embeddings,
-                                epochs=30)
+                                epochs=1)
 exp_uk_fridge.train_model()
 exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DALE_NAME,
                               test_building=1)
