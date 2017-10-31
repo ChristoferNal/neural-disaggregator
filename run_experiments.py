@@ -9,7 +9,7 @@ UK_DALE = '../Datasets/UKDALE/ukdale.h5'
 UK_DALE_NAME = "ukdale"
 REDD_NAME = "redd"
 
-use_embeddings = False
+use_embeddings = True
 dae = DAEDisaggregator(300, use_embeddings)
 exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 name="DAE",

@@ -1,0 +1,2 @@
+,train_building,test_building,embedings,epochs,sample_period,device,recall,precision,accuracy,f1,rel_error_total_energy,mean_abs_error
+0,1,2,False,1,6,fridge,0.9157,1.0,0.9156,0.956,0.247,43.7519
