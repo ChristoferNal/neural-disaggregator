@@ -1,5 +1,4 @@
 from __future__ import print_function, division
-
 import os
 import time
 import matplotlib.pyplot as plt
@@ -9,7 +8,8 @@ from nilmtk import DataSet, HDFDataStore
 
 
 class Experiment:
-    def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end, sample_period, device,
+    def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end,
+                 sample_period, device,
                  with_embeddings, epochs):
         self.__test_dataset_name = None
         self.__test_dataset = None
@@ -26,8 +26,9 @@ class Experiment:
         self.__with_embeddings = with_embeddings
         self.__epochs = epochs
         self.__train_dataset.set_window(start=start, end=end)
-        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building, device,
-                                                                                          with_embeddings, epochs, start, end)
+        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building,
+                                                                          device,
+                                                                          with_embeddings, epochs, start, end)
         if not os.path.exists(self.__train_folder_name):
             os.makedirs(self.__train_folder_name)
 
@@ -63,8 +64,9 @@ class Experiment:
         print("Disagreggating...")
         test_elec, test_meter = self.__get_test_meter()
         test_mains = test_elec.mains()
-        self.disag_filename = "{}/{}_{}{}_{}_{}_out.h5".format(self.__train_folder_name, self.__meter_key, self.__test_dataset_name,
- self.__test_building, self.__test_start, self.__test_end)
+        self.disag_filename = "{}/{}_{}{}_{}_{}_out.h5".format(self.__train_folder_name, self.__meter_key,
+                                                               self.__test_dataset_name,
+                                                               self.__test_building, self.__test_start, self.__test_end)
         output = HDFDataStore(self.disag_filename, 'w')
         self.__model.disaggregate(test_mains, output, test_meter, sample_period=self.__sample_period)
         output.close()
@@ -82,8 +84,8 @@ class Experiment:
         print(predicted)
         ground_truth = test_elec[self.__meter_key]
         fig_name = "{}/{}_{}{}_{}_{}".format(self.__train_folder_name, self.__meter_key, self.__test_dataset_name,
-                                           self.__test_building,
-                                        self.__test_start, self.__test_end)
+                                             self.__test_building,
+                                             self.__test_start, self.__test_end)
         predicted.plot()
         ground_truth.plot()
         plt.savefig(fig_name)
@@ -93,7 +95,8 @@ class Experiment:
 
     def __save_results(self):
         print("========== RESULTS ============")
-        columns = ["train_dataset", "test_dataset", "train_building", "test_building", "embedings", "epochs", "sample_period", "device",
+        columns = ["train_dataset", "test_dataset", "train_building", "test_building", "embedings", "epochs",
+                   "sample_period", "device",
                    "recall", "precision", "accuracy", "f1", "rel_error_total_energy", "mean_abs_error"]
         df_results = pd.DataFrame(columns=columns)
         result = DataSet(self.disag_filename)
@@ -124,7 +127,7 @@ class Experiment:
 
         df_results.to_csv("{}/{}_building{}_{}_{}.csv".format(self.__train_folder_name, self.__test_dataset_name,
                                                               self.__test_building,
-                                                                   self.__test_start, self.__test_end))
+                                                              self.__test_start, self.__test_end))
 
         print("Recall: {}".format(rpaf[0]))
         print("Precision: {}".format(rpaf[1]))
@@ -141,4 +144,3 @@ class Experiment:
         print("Sample period: {}".format(self.__sample_period))
         print("Device: {}".format(self.__meter_key))
         result.store.close()
-
