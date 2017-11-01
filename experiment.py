@@ -64,7 +64,9 @@ class Experiment:
         print("Disagreggating...")
         test_elec, test_meter = self.__get_test_meter()
         test_mains = test_elec.mains()
-        self.disag_filename = "{}/disag_out.h5".format(self.__train_folder_name)
+        self.disag_filename = "{}_{}{}_{}_{}_out.h5".format(self.__meter_key,
+                                                               self.__test_dataset_name,
+                                                               self.__test_building, self.__test_start, self.__test_end)
         output = HDFDataStore(self.disag_filename, 'w')
         self.__model.disaggregate(test_mains, output, test_meter, sample_period=self.__sample_period)
         output.close()
