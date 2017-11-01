@@ -8,7 +8,7 @@ REDD = '../Datasets/REDD/redd.h5'
 UK_DALE = '../Datasets/UKDALE/ukdale.h5'
 UK_DALE_NAME = "ukdale"
 REDD_NAME = "redd"
-DEVICE = "fridge"
+DEVICE = "kettle"
 
 use_embeddings = False
 dae = DAEDisaggregator(300, use_embeddings)
@@ -203,7 +203,7 @@ exp_uk_fridge.run_experiment()
 
 # ------------------------- MICROWAVE -------------------------------------
 
-DEVICE = "microwave"
+DEVICE = "washing machine"
 
 use_embeddings = False
 dae = DAEDisaggregator(300, use_embeddings)
