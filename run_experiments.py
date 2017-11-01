@@ -8,6 +8,7 @@ REDD = '../Datasets/REDD/redd.h5'
 UK_DALE = '../Datasets/UKDALE/ukdale.h5'
 UK_DALE_NAME = "ukdale"
 REDD_NAME = "redd"
+DEVICE = "microwave"
 
 use_embeddings = False
 dae = DAEDisaggregator(300, use_embeddings)
@@ -19,7 +20,7 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 start="20-5-2013",
                                 end="31-12-2014",
                                 sample_period=6,
-                                device='fridge',
+                                device=DEVICE,
                                 with_embeddings=use_embeddings,
                                 epochs=10)
 exp_uk_fridge.train_model()
@@ -50,7 +51,7 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 start="20-5-2013",
                                 end="31-12-2014",
                                 sample_period=6,
-                                device='fridge',
+                                device=DEVICE,
                                 with_embeddings=use_embeddings,
                                 epochs=10)
 exp_uk_fridge.train_model()
@@ -83,7 +84,7 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 start="20-5-2013",
                                 end="31-12-2014",
                                 sample_period=6,
-                                device='fridge',
+                                device=DEVICE,
                                 with_embeddings=use_embeddings,
                                 epochs=30)
 exp_uk_fridge.train_model()
@@ -114,7 +115,7 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 start="20-5-2013",
                                 end="31-12-2014",
                                 sample_period=6,
-                                device='fridge',
+                                device=DEVICE,
                                 with_embeddings=use_embeddings,
                                 epochs=30)
 exp_uk_fridge.train_model()
@@ -147,7 +148,7 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 start="20-5-2013",
                                 end="31-12-2014",
                                 sample_period=6,
-                                device='fridge',
+                                device=DEVICE,
                                 with_embeddings=use_embeddings,
                                 epochs=60)
 exp_uk_fridge.train_model()
@@ -178,7 +179,7 @@ exp_uk_fridge = Experiment(train_dataset_name=UK_DALE_NAME,
                                 start="20-5-2013",
                                 end="31-12-2014",
                                 sample_period=6,
-                                device='fridge',
+                                device=DEVICE,
                                 with_embeddings=use_embeddings,
                                 epochs=60)
 exp_uk_fridge.train_model()
