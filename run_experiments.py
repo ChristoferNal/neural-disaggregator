@@ -33,12 +33,12 @@ exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DA
                               test_building=2)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=1)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=3)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=2)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=4)
 exp_uk_fridge.run_experiment()
 
 use_embeddings = True
@@ -64,12 +64,12 @@ exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DA
                               test_building=2)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=1)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=3)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=2)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=4)
 exp_uk_fridge.run_experiment()
 
 # -----------------------------------------------------------------------------
@@ -97,12 +97,12 @@ exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DA
                               test_building=2)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=1)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=3)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=2)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=4)
 exp_uk_fridge.run_experiment()
 
 use_embeddings = True
@@ -128,12 +128,12 @@ exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DA
                               test_building=2)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=1)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=3)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=2)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=4)
 exp_uk_fridge.run_experiment()
 
 # --------------------------------------------------------------------------------------
@@ -161,12 +161,12 @@ exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DA
                               test_building=2)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=1)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=3)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=2)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=4)
 exp_uk_fridge.run_experiment()
 
 use_embeddings = True
@@ -192,12 +192,12 @@ exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DA
                               test_building=2)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=1)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=3)
 exp_uk_fridge.run_experiment()
 
-exp_uk_fridge.set_test_params(test_dataset_path=REDD, test_dataset_name=REDD_NAME,
-                              test_building=2)
+exp_uk_fridge.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=REDD_NAME,
+                              test_building=4)
 exp_uk_fridge.run_experiment()
 
 
