@@ -1,0 +1,2 @@
+,train_dataset,test_dataset,train_building,test_building,embedings,epochs,sample_period,device,recall,precision,accuracy,f1,rel_error_total_energy,mean_abs_error
+0,ukdale,redd,1,1,False,30,6,washing machine,0.0117,0.8333,0.9822,0.023,0.7367,45.0038
