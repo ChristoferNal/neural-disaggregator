@@ -20,7 +20,7 @@ class Experiment:
         self.__name = name
         self.__model = disaggregator
         self.__train_dataset = DataSet(train_dataset_path)
-        self.__train_building = train_building
+        self.train_building = train_building
         self.__sample_period = sample_period
         self.__meter_key = device
         self.__with_embeddings = with_embeddings
@@ -45,7 +45,7 @@ class Experiment:
     def train_model(self):
         start = time.time()
         print("training...")
-        train_elec = self.__train_dataset.buildings[self.__train_building].elec
+        train_elec = self.__train_dataset.buildings[self.train_building].elec
         train_meter = train_elec.submeters()[self.__meter_key]
         train_mains = train_elec.mains()
 
@@ -118,7 +118,7 @@ class Experiment:
 
         df_results.loc[index, "train_dataset"] = self.__train_dataset_name
         df_results.loc[index, "test_dataset"] = self.__test_dataset_name
-        df_results.loc[index, "train_building"] = self.__train_building
+        df_results.loc[index, "train_building"] = self.train_building
         df_results.loc[index, "test_building"] = self.__test_building
         df_results.loc[index, "embedings"] = self.__with_embeddings
         df_results.loc[index, "epochs"] = self.__epochs
@@ -138,7 +138,7 @@ class Experiment:
         print("Relative error in total energy: {}".format(relative_error))
         print("Mean absolute error(in Watts): {}\n".format(mean_abs_error))
         print("Train dataset: {}".format(self.__train_dataset_name))
-        print("Train building: {}".format(self.__train_building))
+        print("Train building: {}".format(self.train_building))
         print("Test dataset: {}".format(self.__test_dataset_name))
         print("Test building: {}".format(self.__test_building))
         print("With Embeddings: {}".format(self.__with_embeddings))

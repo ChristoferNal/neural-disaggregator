@@ -1,2 +1,0 @@
-,train_dataset,test_dataset,train_building,test_building,embedings,epochs,sample_period,device,recall,precision,accuracy,f1,rel_error_total_energy,mean_abs_error
-0,ukdale,ukdale,1,1,True,30,6,kettle,0.0,,0.8435,,0.905,8.0401
