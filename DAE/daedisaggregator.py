@@ -13,7 +13,7 @@ import sys
 
 from keras.models import load_model
 from keras.models import Sequential
-from keras.layers import Dense, Flatten, Conv1D, Reshape, Dropout, Embedding
+from keras.layers import Dense, Flatten, Conv1D, Reshape, Dropout
 from keras.utils import plot_model
 
 from nilmtk.utils import find_nearest
@@ -35,7 +35,7 @@ class DAEDisaggregator(Disaggregator):
        the minimum length of an acceptable chunk
     '''
 
-    def __init__(self, sequence_length, with_embeddings):
+    def __init__(self, sequence_length):
         '''Initialize disaggregator
 
         Parameters
@@ -47,7 +47,7 @@ class DAEDisaggregator(Disaggregator):
         self.mmax = None
         self.sequence_length = sequence_length
         self.MIN_CHUNK_LENGTH = sequence_length
-        self.model = self._create_model(self.sequence_length, with_embeddings)
+        self.model = self._create_model(self.sequence_length)
 
     def train(self, mains, meter, epochs=1, batch_size=16, **load_kwargs):
         '''Train
@@ -338,33 +338,13 @@ class DAEDisaggregator(Disaggregator):
         tchunk = chunk * mmax
         return tchunk
 
-    def _read_embeddings(self):
-        df = pd.read_csv('embeddings/energy_embeddings.csv')
-        print('reading embeddings...')
-        devices_states = list(df.columns.values)
-        energy_embeddings = df.values
-        energy_embeddings = np.transpose(energy_embeddings)
-        print('Number of embeddings: {}'.format(len(devices_states)))
-        print('Embedding dimension: {}'.format(energy_embeddings[0].size))
-        return devices_states, energy_embeddings
-
-    def _create_model(self, sequence_len, with_embeddings=False):
+    def _create_model(self, sequence_len):
         '''Creates the Auto encoder module described in the paper
         '''
         model = Sequential()
-        print('Using embeddings? {}'.format(with_embeddings))
-        if with_embeddings:
-            devices_states, energy_embeddings = self._read_embeddings()
-            embedding_dimension = energy_embeddings[0].size
-            model.add(Reshape((sequence_len,), input_shape=(sequence_len, 1)))
-            model.add(Embedding(len(devices_states),
-                                embedding_dimension,
-                                weights=[energy_embeddings],
-                                trainable=False))
-            model.add(Conv1D(8, 4, activation="linear", padding="same", strides=1))
-        else:
-            # 1D Conv
-            model.add(Conv1D(8, 4, activation="linear", input_shape=(sequence_len, 1), padding="same", strides=1))
+
+        # 1D Conv
+        model.add(Conv1D(8, 4, activation="linear", input_shape=(sequence_len, 1), padding="same", strides=1))
 
         model.add(Flatten())
 

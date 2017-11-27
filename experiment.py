@@ -9,8 +9,7 @@ from nilmtk import DataSet, HDFDataStore
 
 class Experiment:
     def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end,
-                 sample_period, device,
-                 with_embeddings, epochs):
+                 sample_period, device, epochs):
         self.__test_dataset_name = None
         self.__test_dataset = None
         self.__test_building = None
@@ -23,12 +22,10 @@ class Experiment:
         self.train_building = train_building
         self.__sample_period = sample_period
         self.__meter_key = device
-        self.__with_embeddings = with_embeddings
         self.__epochs = epochs
         self.__train_dataset.set_window(start=start, end=end)
-        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building,
-                                                                          device,
-                                                                          with_embeddings, epochs, start, end)
+        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}".format(name, train_dataset_name, train_building,
+                                                                          device, epochs, start, end)
         if not os.path.exists(self.__train_folder_name):
             os.makedirs(self.__train_folder_name)
 
@@ -120,7 +117,6 @@ class Experiment:
         df_results.loc[index, "test_dataset"] = self.__test_dataset_name
         df_results.loc[index, "train_building"] = self.train_building
         df_results.loc[index, "test_building"] = self.__test_building
-        df_results.loc[index, "embedings"] = self.__with_embeddings
         df_results.loc[index, "epochs"] = self.__epochs
         df_results.loc[index, "sample_period"] = self.__sample_period
         df_results.loc[index, "device"] = self.__meter_key
@@ -141,7 +137,6 @@ class Experiment:
         print("Train building: {}".format(self.train_building))
         print("Test dataset: {}".format(self.__test_dataset_name))
         print("Test building: {}".format(self.__test_building))
-        print("With Embeddings: {}".format(self.__with_embeddings))
         print("Epochs: {}".format(self.__epochs))
         print("Sample period: {}".format(self.__sample_period))
         print("Device: {}".format(self.__meter_key))
