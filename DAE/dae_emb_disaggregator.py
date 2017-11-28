@@ -10,21 +10,27 @@ TOKENIZATION_WINDOW = 10
 
 class DAEEmbeddingsDisaggregator(DAEDisaggregator):
     def __init__(self, sequence_length, clustering_model):
-        super(DAEDisaggregator, self).__init__(sequence_length)
+       # super(DAEDisaggregator, self).__init__()
         self.clustering_model = clustering_model
-        mode_tokens = sequence_length % TOKENIZATION_WINDOW
-        if mode_tokens is not 0:
-            sequence_length += TOKENIZATION_WINDOW - mode_tokens
-        self.sequence_length = sequence_length/TOKENIZATION_WINDOW
+        self.MODEL_NAME = "AUTOENCODER"
+        self.mmax = None
+        #mode_tokens = sequence_length % TOKENIZATION_WINDOW
+        #if mode_tokens is not 0:
+        #    sequence_length += TOKENIZATION_WINDOW - mode_tokens
+        self.sequence_length = sequence_length
+        self.MIN_CHUNK_LENGTH = self.sequence_length
+        self.model = self._create_model(self.sequence_length)
 
-
-    def train(self, clustering_model, mains, meter, epochs=1, batch_size=16, **load_kwargs):
+    def train(self, mains, meter, epochs=1, batch_size=16, **load_kwargs):
         main_power_series = mains.power_series(**load_kwargs)
         meter_power_series = meter.power_series(**load_kwargs)
 
         run = True
         mainchunk = next(main_power_series)
         meterchunk = next(meter_power_series)
+        if self.mmax == None:
+            self.mmax = meterchunk.max()
+
         while (run):
             meterchunk = self._normalize(meterchunk, self.mmax)
 
@@ -50,20 +56,28 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
         # down_limit =  max(len(mainchunk), len(meterchunk))
 
         # Replace NaNs with 0s
-        mainchunk.fillna(method='ffill', inplace=True)
+        mainchunk.fillna(0, inplace=True)
         meterchunk.fillna(0, inplace=True)
         ix = mainchunk.index.intersection(meterchunk.index)
         mainchunk = mainchunk[ix]
         meterchunk = meterchunk[ix]
-
-        tokenized_chunk = mainchunk.reshape(-1, TOKENIZATION_WINDOW)
-        sequence = self.clustering_model.predict(tokenized_chunk)
+        print("len of mainchunk")
+        print(len(mainchunk))
+        print(type(mainchunk))
 
         # Create array of batches
         # additional = s - ((up_limit-down_limit) % s)
-        additional = s - (len(ix) % s)
-        X_batch = np.append(sequence, np.zeros(additional))
+        factor = s * TOKENIZATION_WINDOW
+        additional = factor - (len(ix) % factor)
+        print("additional: {}, factor: {}".format(additional, s))
+        X_batch = np.append(mainchunk, np.zeros(additional))
         Y_batch = np.append(meterchunk, np.zeros(additional))
+
+        Y_batch = np.mean(Y_batch.reshape(-1, TOKENIZATION_WINDOW), axis=1)
+        X_batch = X_batch.reshape(-1, TOKENIZATION_WINDOW)
+        X_batch = self.clustering_model.predict(X_batch)
+        print("len of tokenized sequence")
+        print(len(X_batch))
 
         X_batch = np.reshape(X_batch, (int(len(X_batch) / s), s, 1))
         Y_batch = np.reshape(Y_batch, (int(len(Y_batch) / s), s, 1))
@@ -101,10 +115,7 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
             timeframes.append(chunk.timeframe)
             measurement = chunk.name
 
-            tokenized_chunk = chunk.reshape(-1, TOKENIZATION_WINDOW)
-            sequence = self.clustering_model.predict(tokenized_chunk)
-
-            appliance_power = self.disaggregate_chunk(sequence)
+            appliance_power = self.disaggregate_chunk(chunk)
             appliance_power[appliance_power < 0] = 0
             appliance_power = self._denormalize(appliance_power, self.mmax)
 
@@ -150,11 +161,17 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
 
         mains.fillna(0, inplace=True)
 
-        additional = s - (up_limit % s)
+        factor = s * TOKENIZATION_WINDOW
+        additional = factor - (up_limit % factor)
+        print("additional: {}, factor: {}".format(additional, s))
         X_batch = np.append(mains, np.zeros(additional))
+        X_batch = X_batch.reshape(-1, TOKENIZATION_WINDOW)
+        X_batch = self.clustering_model.predict(X_batch)
+
         X_batch = np.reshape(X_batch, (int(len(X_batch) / s), s, 1))
 
         pred = self.model.predict(X_batch)
+        pred = np.repeat(pred, TOKENIZATION_WINDOW)
         pred = np.reshape(pred, (up_limit + additional))[:up_limit]
         column = pd.Series(pred, index=mains.index, name=0)
 

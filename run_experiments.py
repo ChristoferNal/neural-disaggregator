@@ -1,5 +1,4 @@
 from DAE.dae_emb_disaggregator import DAEEmbeddingsDisaggregator
-from DAE.daedisaggregator import DAEDisaggregator
 from experiment import Experiment
 from tensorflow.python.client import device_lib
 
@@ -11,7 +10,7 @@ UK_DALE_NAME = "ukdale"
 REDD_NAME = "redd"
 DEVICE = "kettle"
 WINDOW_KETTLE = 128
-SAVED_MODEL = "gmm.pkl"
+SAVED_MODEL = "clustering_model/gmm.pkl"
 from sklearn.externals import joblib
 
 clustering_model = joblib.load(SAVED_MODEL)
@@ -22,8 +21,8 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
-                        start=None,
-                        end=None,
+                        start="1-1-2015",
+                        end="31-1-2015",
                         sample_period=6,
                         device=DEVICE,
                         epochs=25)

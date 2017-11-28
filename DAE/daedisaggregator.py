@@ -1,25 +1,17 @@
 from __future__ import print_function, division
-from warnings import warn, filterwarnings
 
-from keras import losses
-from matplotlib import rcParams
-import matplotlib.pyplot as plt
-
-import pandas as pd
-import numpy as np
-import h5py
 import random
 import sys
 
-from keras.models import load_model
-from keras.models import Sequential
+import h5py
+import numpy as np
+import pandas as pd
 from keras.layers import Dense, Flatten, Conv1D, Reshape, Dropout
+from keras.models import Sequential
+from keras.models import load_model
 from keras.utils import plot_model
-
-from nilmtk.utils import find_nearest
-from nilmtk.feature_detectors import cluster
 from nilmtk.disaggregate import Disaggregator
-from nilmtk.datastore import HDFDataStore
+
 
 class DAEDisaggregator(Disaggregator):
     '''Denoising Autoencoder disaggregator from Neural NILM
