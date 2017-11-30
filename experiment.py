@@ -9,12 +9,13 @@ from nilmtk import DataSet, HDFDataStore
 
 class Experiment:
     def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end,
-                 sample_period, device, epochs):
+                 sample_period, device, epochs, embeddings=False):
         self.__test_dataset_name = None
         self.__test_dataset = None
         self.__test_building = None
         self.__test_start = None
         self.__test_end = None
+        self.__embeddings = embeddings
         self.__train_dataset_name = train_dataset_name
         self.__name = name
         self.__model = disaggregator
@@ -24,8 +25,8 @@ class Experiment:
         self.__meter_key = device
         self.__epochs = epochs
         self.__train_dataset.set_window(start=start, end=end)
-        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}".format(name, train_dataset_name, train_building,
-                                                                          device, epochs, start, end)
+        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building,
+                                                                          device, embeddings, epochs, start, end)
         if not os.path.exists(self.__train_folder_name):
             os.makedirs(self.__train_folder_name)
 
@@ -92,7 +93,7 @@ class Experiment:
 
     def __save_results(self):
         print("========== RESULTS ============")
-        columns = ["train_dataset", "test_dataset", "train_building", "test_building", "embedings", "epochs",
+        columns = ["train_dataset", "test_dataset", "train_building", "test_building", "embeddings", "epochs",
                    "sample_period", "device",
                    "recall", "precision", "accuracy", "f1", "rel_error_total_energy", "mean_abs_error"]
         df_results = pd.DataFrame(columns=columns)
@@ -120,6 +121,7 @@ class Experiment:
         df_results.loc[index, "epochs"] = self.__epochs
         df_results.loc[index, "sample_period"] = self.__sample_period
         df_results.loc[index, "device"] = self.__meter_key
+        df_results.loc[index, "embeddings"] = self.__embeddings
 
         print(df_results)
 

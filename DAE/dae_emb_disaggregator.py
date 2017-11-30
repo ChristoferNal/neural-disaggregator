@@ -4,6 +4,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Flatten, Conv1D, Reshape, Dropout, Embedding
 from keras.utils import plot_model
 import pandas as pd
+import psutil
 
 EMBEDDINGS_CSV = 'embeddings/energy_embeddings_gmm.csv'
 TOKENIZATION_WINDOW = 10
@@ -61,9 +62,6 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
         ix = mainchunk.index.intersection(meterchunk.index)
         mainchunk = mainchunk[ix]
         meterchunk = meterchunk[ix]
-        print("len of mainchunk")
-        print(len(mainchunk))
-        print(type(mainchunk))
 
         # Create array of batches
         # additional = s - ((up_limit-down_limit) % s)
@@ -75,10 +73,13 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
 
         Y_batch = np.mean(Y_batch.reshape(-1, TOKENIZATION_WINDOW), axis=1)
         X_batch = X_batch.reshape(-1, TOKENIZATION_WINDOW)
+        print(psutil.virtual_memory())
+        print(psutil.swap_memory())
         X_batch = self.clustering_model.predict(X_batch)
-        print("len of tokenized sequence")
-        print(len(X_batch))
-
+        #print("len of tokenized sequence")
+        #print(len(X_batch))
+        print(psutil.virtual_memory())
+        print(psutil.swap_memory())
         X_batch = np.reshape(X_batch, (int(len(X_batch) / s), s, 1))
         Y_batch = np.reshape(Y_batch, (int(len(Y_batch) / s), s, 1))
 
