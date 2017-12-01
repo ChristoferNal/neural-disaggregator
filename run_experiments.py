@@ -38,6 +38,7 @@ from sklearn.externals import joblib
 def test_ukdale_building2(exp):
     exp.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DALE_NAME,
                                test_building=2)
+    exp.set_testing_window()
     exp.run_experiment()
 
 def test_ukdale_buidling1_short_period(exp):
