@@ -62,19 +62,22 @@ class Experiment:
         print("Disagreggating...")
         test_elec, test_meter = self.__get_test_meter()
         test_mains = test_elec.mains()
-        self.disag_filename = "{}/{}_{}{}_{}_{}_out.h5".format(self.__train_folder_name, self.__meter_key,
-                                                               self.__test_dataset_name,
-                                                               self.__test_building, self.__test_start, self.__test_end)
+        self.set_disag_filename()
         output = HDFDataStore(self.disag_filename, 'w')
         self.__model.disaggregate(test_mains, output, test_meter, sample_period=self.__sample_period)
         output.close()
+
+    def set_disag_filename(self):
+        self.disag_filename = "{}/{}_{}{}_{}_{}_out.h5".format(self.__train_folder_name, self.__meter_key,
+                                                               self.__test_dataset_name,
+                                                               self.__test_building, self.__test_start, self.__test_end)
 
     def __get_test_meter(self):
         test_elec = self.__test_dataset.buildings[self.__test_building].elec
         test_meter = test_elec.submeters()[self.__meter_key]
         return test_elec, test_meter
 
-    def __save_diagram(self, show_plot=False):
+    def save_diagram(self, show_plot=False):
         test_elec, _ = self.__get_test_meter()
         result = DataSet(self.disag_filename)
         res_elec = result.buildings[self.__test_building].elec
