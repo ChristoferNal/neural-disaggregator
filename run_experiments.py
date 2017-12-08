@@ -21,19 +21,25 @@ WINDOW_WASHING_MACHINE = 200
 WINDOW_DISH_WASHER = 100
 WINDOW_FIRDGE = 50
 
-#KETTLE_EPOCHS = 130
-#MICROWAVE_EPOCHS = 80
-#DISHWASHER_EPOCHS = 130
-#WASHING_MACHINE_EPOCHS = 200
-#FRIDGE_EPOCHS = 110
-KETTLE_EPOCHS = 30
-MICROWAVE_EPOCHS = 30
-DISHWASHER_EPOCHS = 30
-WASHING_MACHINE_EPOCHS = 30
-FRIDGE_EPOCHS = 30
+KETTLE_EPOCHS = 130
+MICROWAVE_EPOCHS = 80
+DISHWASHER_EPOCHS = 130
+WASHING_MACHINE_EPOCHS = 200
+FRIDGE_EPOCHS = 110
+#KETTLE_EPOCHS = 30
+#MICROWAVE_EPOCHS = 30
+#DISHWASHER_EPOCHS = 30
+#WASHING_MACHINE_EPOCHS = 30
+#FRIDGE_EPOCHS = 30
+
 SAVED_MODEL = "clustering_model/gmm.pkl"
 from sklearn.externals import joblib
 
+def test_ukdale_building5(exp):
+    exp.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DALE_NAME,
+                               test_building=5)
+    exp.set_testing_window(start="1-7-2014", end="30-7-2014")
+    exp.run_experiment()
 
 def test_ukdale_building2(exp):
     exp.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DALE_NAME,
@@ -61,9 +67,13 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=KETTLE_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+buildings.append(3)
+buildings.append(4)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 dae = DAEDisaggregator(WINDOW_KETTLE)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -77,9 +87,13 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=KETTLE_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+buildings.append(3)
+buildings.append(4)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 
 
 
@@ -98,9 +112,11 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=MICROWAVE_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 dae = DAEDisaggregator(WINDOW_MICROWAVE)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -114,9 +130,11 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=MICROWAVE_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 
 DEVICE = "fridge"
 
@@ -132,9 +150,12 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=FRIDGE_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+buildings.append(4)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 dae = DAEDisaggregator(WINDOW_FIRDGE)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -148,9 +169,12 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=FRIDGE_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+buildings.append(4)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 
 
 
@@ -168,9 +192,11 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=WASHING_MACHINE_EPOCHS)
-experiment.train_model()
+buildings = list()
+buildings.append(1)
+buildings.append(5)
+experiment.train_model_across_buildings(buildings)
 test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 dae = DAEDisaggregator(WINDOW_WASHING_MACHINE)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -184,9 +210,11 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=WASHING_MACHINE_EPOCHS)
-experiment.train_model()
+buildings = list()
+buildings.append(1)
+buildings.append(5)
+experiment.train_model_across_buildings(buildings)
 test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
 
 DEVICE = "dish washer"
 
@@ -202,9 +230,11 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=DISHWASHER_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 dae = DAEDisaggregator(WINDOW_DISH_WASHER)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -218,7 +248,9 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         sample_period=6,
                         device=DEVICE,
                         epochs=DISHWASHER_EPOCHS)
-experiment.train_model()
-test_ukdale_building2(experiment)
-test_ukdale_buidling1_short_period(experiment)
+buildings = list()
+buildings.append(1)
+buildings.append(2)
+experiment.train_model_across_buildings(buildings)
+test_ukdale_building5(experiment)
 

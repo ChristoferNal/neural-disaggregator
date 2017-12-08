@@ -1,4 +1,7 @@
+from __future__ import print_function, division
 import random
+
+import sys
 
 from DAE.daedisaggregator import DAEDisaggregator
 import numpy as np
@@ -144,7 +147,6 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
             random.shuffle(batch_indexes)
 
             for bi, b in enumerate(batch_indexes):
-
                 print("Batch {} of {}".format(bi,num_of_batches), end="\r")
                 sys.stdout.flush()
                 X_batch = np.empty((batch_size*num_meters, s, 1))
@@ -156,13 +158,13 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
                     mainpart = mainpart[b*batch_size*factor:(b+1)*batch_size*factor]
                     meterpart = meterpart[b*batch_size*factor:(b+1)*batch_size*factor]
 
-                    X_batch = mainpart.reshape(-1, TOKENIZATION_WINDOW)
-                    Y_batch = np.mean(meterpart.reshape(-1, TOKENIZATION_WINDOW), axis=1)
-                    X_batch = self.clustering_model.predict(X_batch)
+                    mainpart = mainpart.reshape(-1, TOKENIZATION_WINDOW)
+                    meterpart = np.mean(meterpart.reshape(-1, TOKENIZATION_WINDOW), axis=1)
+                    mainpart = self.clustering_model.predict(mainpart)
 
 
-                    X = np.reshape(X_batch, (batch_size, s, 1))
-                    Y = np.reshape(Y_batch, (batch_size, s, 1))
+                    X = np.reshape(mainpart, (batch_size, s, 1))
+                    Y = np.reshape(meterpart, (batch_size, s, 1))
 
                     X_batch[i*batch_size:(i+1)*batch_size] = np.array(X)
                     Y_batch[i*batch_size:(i+1)*batch_size] = np.array(Y)
@@ -216,6 +218,7 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
                 appliance_power.values, index=appliance_power.index,
                 columns=cols, dtype="float32")
             key = '{}/elec/meter{}'.format(building_path, meter_instance)
+            print("bugggggggggggggggggggg")
             output_datastore.append(key, df)
 
             # Append aggregate data to output

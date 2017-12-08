@@ -53,6 +53,23 @@ class Experiment:
         end = time.time()
         print("Train finished in: ", end - start, " seconds.")
 
+    def train_model_across_buildings(self, buildings):
+        start = time.time()
+        print("training...")
+        mainlist = list()
+        meterlist = list()
+        for building in buildings:
+            train_elec = self.__train_dataset.buildings[self.train_building].elec
+            train_meter = train_elec.submeters()[self.__meter_key]
+            train_mains = train_elec.mains()
+            meterlist.append(train_meter)
+            mainlist.append(train_mains)
+
+        self.__model.train_across_buildings(mainlist, meterlist, self.__epochs, sample_period=self.__sample_period)
+        self.__model.export_model("{}/trained_model.h5".format(self.__train_folder_name))
+        end = time.time()
+        print("Train finished in: ", end - start, " seconds.")
+
     def run_experiment(self):
         self.__test_model()
         # self.__save_diagram()
