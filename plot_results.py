@@ -1,5 +1,7 @@
 from DAE.dae_emb_disaggregator import DAEEmbeddingsDisaggregator
 from DAE.daedisaggregator import DAEDisaggregator
+from GRU.gru_emb_disaggregator import GRUEmbeddingsDisaggregator
+from GRU.grudisaggregator import GRUDisaggregator
 from experiment import Experiment
 from tensorflow.python.client import device_lib
 
@@ -26,11 +28,11 @@ WINDOW_FIRDGE = 50
 #DISHWASHER_EPOCHS = 130
 #WASHING_MACHINE_EPOCHS = 200
 #FRIDGE_EPOCHS = 110
-KETTLE_EPOCHS = 30
-MICROWAVE_EPOCHS = 30
-DISHWASHER_EPOCHS = 30
-WASHING_MACHINE_EPOCHS = 30
-FRIDGE_EPOCHS = 30
+KETTLE_EPOCHS = 15
+MICROWAVE_EPOCHS = 15
+DISHWASHER_EPOCHS = 15
+WASHING_MACHINE_EPOCHS = 15
+FRIDGE_EPOCHS = 15
 SAVED_MODEL = "clustering_model/gmm.pkl"
 from sklearn.externals import joblib
 
@@ -52,11 +54,83 @@ def test_ukdale_buidling1_short_period(exp):
 
 clustering_model = joblib.load(SAVED_MODEL)
 
+DEVICE = "kettle"
+
+MODEL_NAME = "GRU"
+dae = GRUEmbeddingsDisaggregator(WINDOW_KETTLE, clustering_model)
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=True,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=KETTLE_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+print("#------------------------------------------------------------------------------------------------------------")
+dae = GRUDisaggregator()
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=False,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=KETTLE_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
+
+#--------------------------------------------------------------
+DEVICE = "microwave"
+
+dae = GRUEmbeddingsDisaggregator(WINDOW_MICROWAVE, clustering_model)
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=True,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=MICROWAVE_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
+print("#------------------------------------------------------------------------------------------------------------")
+dae = GRUDisaggregator()
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=False,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=MICROWAVE_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
 DEVICE = "fridge"
 
-dae = DAEDisaggregator(WINDOW_FIRDGE)
+dae = GRUEmbeddingsDisaggregator(WINDOW_FIRDGE, clustering_model)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -69,3 +143,90 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
 test_ukdale_building5(experiment)
 experiment.set_disag_filename()
 experiment.save_diagram(True)
+print("#------------------------------------------------------------------------------------------------------------")
+dae = DAEDisaggregator(WINDOW_FIRDGE)
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=False,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=FRIDGE_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
+
+DEVICE = "washing machine"
+
+dae = GRUEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model)
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=True,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=WASHING_MACHINE_EPOCHS)
+test_ukdale_building2(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
+print("#------------------------------------------------------------------------------------------------------------")
+dae = GRUDisaggregator()
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=False,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=WASHING_MACHINE_EPOCHS)
+test_ukdale_building2(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
+DEVICE = "dish washer"
+
+dae = GRUEmbeddingsDisaggregator(WINDOW_DISH_WASHER, clustering_model)
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=True,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=DISHWASHER_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+print("#------------------------------------------------------------------------------------------------------------")
+dae = GRUDisaggregator()
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=False,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=DISHWASHER_EPOCHS)
+test_ukdale_building5(experiment)
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
