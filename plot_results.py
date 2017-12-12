@@ -62,15 +62,10 @@ experiment = Experiment(train_dataset_name=UK_DALE_NAME,
                         train_building=1,
                         start=START,
                         end=END,
-                        embeddings=False,
+                        embeddings=True,
                         sample_period=6,
                         device=DEVICE,
                         epochs=FRIDGE_EPOCHS)
-test_ukdale_buidling1_short_period(experiment)
+test_ukdale_building5(experiment)
 experiment.set_disag_filename()
 experiment.save_diagram(True)
-
-test_ukdale_building2(experiment)
-experiment.set_disag_filename()
-experiment.save_diagram(True)
-

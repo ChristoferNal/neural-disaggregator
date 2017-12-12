@@ -1,5 +1,8 @@
 from DAE.dae_emb_disaggregator import DAEEmbeddingsDisaggregator
 from DAE.daedisaggregator import DAEDisaggregator
+from GRU.gru_emb_disaggregator import GRUEmbeddingsDisaggregator
+from GRU.grudisaggregator import GRUDisaggregator
+from RNN.rnndisaggregator import RNNDisaggregator
 from experiment import Experiment
 from tensorflow.python.client import device_lib
 
@@ -26,11 +29,11 @@ WINDOW_FIRDGE = 50
 #DISHWASHER_EPOCHS = 130
 #WASHING_MACHINE_EPOCHS = 200
 #FRIDGE_EPOCHS = 110
-KETTLE_EPOCHS = 30
-MICROWAVE_EPOCHS = 30
-DISHWASHER_EPOCHS = 30
-WASHING_MACHINE_EPOCHS = 30
-FRIDGE_EPOCHS = 30
+KETTLE_EPOCHS = 15
+MICROWAVE_EPOCHS = 15
+DISHWASHER_EPOCHS = 15
+WASHING_MACHINE_EPOCHS = 15
+FRIDGE_EPOCHS = 15
 
 SAVED_MODEL = "clustering_model/gmm.pkl"
 from sklearn.externals import joblib
@@ -55,9 +58,10 @@ def test_ukdale_buidling1_short_period(exp):
 
 clustering_model = joblib.load(SAVED_MODEL)
 
-dae = DAEEmbeddingsDisaggregator(WINDOW_KETTLE, clustering_model)
+MODEL_NAME = "GRU"
+dae = GRUEmbeddingsDisaggregator(WINDOW_KETTLE, clustering_model)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -75,9 +79,9 @@ buildings.append(4)
 experiment.train_model_across_buildings(buildings)
 test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
-dae = DAEDisaggregator(WINDOW_KETTLE)
+dae = GRUDisaggregator()
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -100,9 +104,9 @@ test_ukdale_building5(experiment)
 #--------------------------------------------------------------
 DEVICE = "microwave"
 
-dae = DAEEmbeddingsDisaggregator(WINDOW_MICROWAVE, clustering_model)
+dae = GRUEmbeddingsDisaggregator(WINDOW_MICROWAVE, clustering_model)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -118,9 +122,9 @@ buildings.append(2)
 experiment.train_model_across_buildings(buildings)
 test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
-dae = DAEDisaggregator(WINDOW_MICROWAVE)
+dae = GRUDisaggregator()
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -138,9 +142,9 @@ test_ukdale_building5(experiment)
 
 DEVICE = "fridge"
 
-dae = DAEEmbeddingsDisaggregator(WINDOW_FIRDGE, clustering_model)
+dae = GRUEmbeddingsDisaggregator(WINDOW_FIRDGE, clustering_model)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -159,7 +163,7 @@ test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 dae = DAEDisaggregator(WINDOW_FIRDGE)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -180,9 +184,9 @@ test_ukdale_building5(experiment)
 
 DEVICE = "washing machine"
 
-dae = DAEEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model)
+dae = GRUEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -198,9 +202,9 @@ buildings.append(5)
 experiment.train_model_across_buildings(buildings)
 test_ukdale_building2(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
-dae = DAEDisaggregator(WINDOW_WASHING_MACHINE)
+dae = GRUDisaggregator()
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -218,9 +222,9 @@ test_ukdale_building2(experiment)
 
 DEVICE = "dish washer"
 
-dae = DAEEmbeddingsDisaggregator(WINDOW_DISH_WASHER, clustering_model)
+dae = GRUEmbeddingsDisaggregator(WINDOW_DISH_WASHER, clustering_model)
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,
@@ -236,9 +240,9 @@ buildings.append(2)
 experiment.train_model_across_buildings(buildings)
 test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
-dae = DAEDisaggregator(WINDOW_DISH_WASHER)
+dae = GRUDisaggregator()
 experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name="DAE",
+                        name=MODEL_NAME,
                         disaggregator=dae,
                         train_dataset_path=UK_DALE,
                         train_building=1,

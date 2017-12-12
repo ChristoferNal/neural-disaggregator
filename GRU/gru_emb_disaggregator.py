@@ -159,10 +159,17 @@ class GRUEmbeddingsDisaggregator(GRUDisaggregator):
         X_batch = np.reshape(X_batch, (X_batch.shape[0], 1, 1))
 
         pred = self.model.predict(X_batch, batch_size=128)
+        print("shape of pred")
+        print(np.shape(pred))
         pred = np.reshape(pred, (len(pred)))
+        print(pred)
         pred = np.repeat(pred, TOKENIZATION_WINDOW)
+        print(pred)
+        print(np.shape(pred))
         pred = np.reshape(pred, (up_limit + additional))[:up_limit]
-        column = pd.Series(pred, index=mains.index[:len(X_batch)], name=0)
+        print(np.shape(pred))
+        print("len x batch = ".format(len(X_batch)))
+        column = pd.Series(pred, index=mains.index[:len(X_batch)*TOKENIZATION_WINDOW], name=0)
 
         appliance_powers_dict = {}
         appliance_powers_dict[0] = column

@@ -218,7 +218,6 @@ class DAEEmbeddingsDisaggregator(DAEDisaggregator):
                 appliance_power.values, index=appliance_power.index,
                 columns=cols, dtype="float32")
             key = '{}/elec/meter{}'.format(building_path, meter_instance)
-            print("bugggggggggggggggggggg")
             output_datastore.append(key, df)
 
             # Append aggregate data to output
