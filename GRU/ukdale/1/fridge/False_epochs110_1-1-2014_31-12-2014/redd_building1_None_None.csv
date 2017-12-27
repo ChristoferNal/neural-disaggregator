@@ -1,0 +1,2 @@
+,train_dataset,test_dataset,train_building,test_building,embeddings,epochs,sample_period,device,recall,precision,accuracy,f1,rel_error_total_energy,mean_abs_error
+0,ukdale,redd,1,1,False,110,6,fridge,0.956,0.3973,0.5651,0.5613,0.3124,46.0694

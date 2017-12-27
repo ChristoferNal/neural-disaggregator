@@ -1,0 +1,2 @@
+,train_dataset,test_dataset,train_building,test_building,embeddings,epochs,sample_period,device,recall,precision,accuracy,f1,rel_error_total_energy,mean_abs_error
+0,ukdale,ukdale,1,5,True,130,6,dish washer,1.0,0.0574,0.0574,0.1086,0.9516,339.7116
