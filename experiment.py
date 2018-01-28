@@ -9,13 +9,14 @@ from nilmtk import DataSet, HDFDataStore
 
 class Experiment:
     def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end,
-                 sample_period, device, epochs, embeddings=False):
+                 sample_period, device, epochs, embeddings=False, trainable_embeddings=False):
         self.__test_dataset_name = None
         self.__test_dataset = None
         self.__test_building = None
         self.__test_start = None
         self.__test_end = None
         self.__embeddings = embeddings
+        self.__trainable_embeddings = trainable_embeddings
         self.__train_dataset_name = train_dataset_name
         self.__name = name
         self.__model = disaggregator
@@ -25,7 +26,8 @@ class Experiment:
         self.__meter_key = device
         self.__epochs = epochs
         self.__train_dataset.set_window(start=start, end=end)
-        self.__train_folder_name = "{}/{}/{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building,
+        self.__train_folder_name = "{}/{}/{}/trainable_emb_{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building,
+                                                                          trainable_embeddings,
                                                                           device, embeddings, epochs, start, end)
         if not os.path.exists(self.__train_folder_name):
             os.makedirs(self.__train_folder_name)
