@@ -32,13 +32,13 @@ class RNNDisaggregator(Disaggregator):
        the minimum length of an acceptable chunk
     '''
 
-    def __init__(self, with_embeddings):
+    def __init__(self):
         '''Initialize disaggregator
         '''
         self.MODEL_NAME = "LSTM"
         self.mmax = None
         self.MIN_CHUNK_LENGTH = 100
-        self.model = self._create_model(with_embeddings)
+        self.model = self._create_model()
 
     def train(self, mains, meter, epochs=1, batch_size=128, **load_kwargs):
         '''Train
@@ -357,24 +357,13 @@ class RNNDisaggregator(Disaggregator):
         print('Embedding dimension: {}'.format(energy_embeddings[0].size))
         return devices_states, energy_embeddings
 
-    def _create_model(self, with_embeddings=False):
+    def _create_model(self):
         '''Creates the RNN module described in the paper
         '''
         model = Sequential()
-        print('Using embeddings? ')
-        print(with_embeddings)
-        if with_embeddings:
-            devices_states, energy_embeddings = self._read_embeddings()
-            embedding_dimension = energy_embeddings[0].size
-            model.add(Reshape((1,), input_shape=(1, 1)))
-            model.add(Embedding(len(devices_states),
-                                embedding_dimension,
-                                weights=[energy_embeddings],
-                                trainable=False))
-            model.add(Conv1D(16, 4, activation="tanh", padding="same", strides=1))
-        else:
-            # 1D Conv
-            model.add(Conv1D(16, 4, activation="linear", input_shape=(1,1), padding="same", strides=1))
+
+        # 1D Conv
+        model.add(Conv1D(16, 4, activation="linear", input_shape=(1,1), padding="same", strides=1))
 
         #Bi-directional LSTMs
         model.add(Bidirectional(LSTM(128, return_sequences=True, stateful=False), merge_mode='concat'))
