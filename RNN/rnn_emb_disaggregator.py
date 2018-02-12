@@ -190,7 +190,7 @@ class RNNEmbeddingsDisaggregator(RNNDisaggregator):
         '''
         model = Sequential()
         print('Using embeddings? ')
-        print(with_embeddings)
+        print(True)
         devices_states, energy_embeddings = self._read_embeddings()
         embedding_dimension = energy_embeddings[0].size
         model.add(Reshape((1,), input_shape=(1, 1)))
