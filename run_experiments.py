@@ -66,26 +66,26 @@ clustering_model = joblib.load(SAVED_MODEL)
 trainable = True
 
 MODEL_NAME = "GRU"
-dae = GRUEmbeddingsDisaggregator(WINDOW_KETTLE, clustering_model, trainable)
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=True,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=KETTLE_EPOCHS,
-                        trainable_embeddings = trainable)
-buildings = list()
-buildings.append(1)
-buildings.append(2)
-buildings.append(3)
-buildings.append(4)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building5(experiment)
+# dae = GRUEmbeddingsDisaggregator(WINDOW_KETTLE, clustering_model, trainable)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=KETTLE_EPOCHS,
+#                         trainable_embeddings = trainable)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(2)
+# buildings.append(3)
+# buildings.append(4)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building5(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 # dae = GRUDisaggregator()
 # experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -108,27 +108,27 @@ print("#------------------------------------------------------------------------
 # test_ukdale_building5(experiment)
 
 #--------------------------------------------------------------
-DEVICE = "microwave"
-
-dae = GRUEmbeddingsDisaggregator(WINDOW_MICROWAVE, clustering_model, trainable)
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=True,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=MICROWAVE_EPOCHS,
-                        trainable_embeddings = trainable)
-buildings = list()
-buildings.append(1)
-buildings.append(2)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building5(experiment)
-test_redd_building1(experiment)
+# DEVICE = "microwave"
+#
+# dae = GRUEmbeddingsDisaggregator(WINDOW_MICROWAVE, clustering_model, trainable)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=MICROWAVE_EPOCHS,
+#                         trainable_embeddings = trainable)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(2)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building5(experiment)
+# test_redd_building1(experiment)
 print("#------------------------------------------------------------------------------------------------------------")
 # dae = GRUDisaggregator()
 # experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -148,29 +148,29 @@ print("#------------------------------------------------------------------------
 # experiment.train_model_across_buildings(buildings)
 # test_ukdale_building5(experiment)
 # test_redd_building1(experiment)
-
-DEVICE = "fridge"
-
-dae = GRUEmbeddingsDisaggregator(WINDOW_FIRDGE, clustering_model, trainable)
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=True,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=FRIDGE_EPOCHS,
-                        trainable_embeddings = trainable)
-buildings = list()
-buildings.append(1)
-buildings.append(2)
-buildings.append(4)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building5(experiment)
-test_redd_building1(experiment)
+#
+# DEVICE = "fridge"
+#
+# dae = GRUEmbeddingsDisaggregator(WINDOW_FIRDGE, clustering_model, trainable)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=FRIDGE_EPOCHS,
+#                         trainable_embeddings = trainable)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(2)
+# buildings.append(4)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building5(experiment)
+# test_redd_building1(experiment)
 
 print("#------------------------------------------------------------------------------------------------------------")
 # dae = DAEDisaggregator(WINDOW_FIRDGE)
@@ -194,28 +194,28 @@ print("#------------------------------------------------------------------------
 # test_redd_building1(experiment)
 
 
-
-DEVICE = "washing machine"
-
-dae = GRUEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model, trainable)
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=True,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=WASHING_MACHINE_EPOCHS,
-                        trainable_embeddings = trainable)
-buildings = list()
-buildings.append(1)
-buildings.append(5)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building2(experiment)
-test_redd_building1(experiment)
+#
+# DEVICE = "washing machine"
+#
+# dae = GRUEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model, trainable)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=WASHING_MACHINE_EPOCHS,
+#                         trainable_embeddings = trainable)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(5)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building2(experiment)
+# test_redd_building1(experiment)
 
 print("#------------------------------------------------------------------------------------------------------------")
 # dae = GRUDisaggregator()

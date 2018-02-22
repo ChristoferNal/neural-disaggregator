@@ -195,48 +195,48 @@ DEVICE = "fridge"
 # test_redd_building1(experiment)
 #
 
-
-DEVICE = "washing machine"
-
-dae = RNNEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model, trainable)
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=True,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=WASHING_MACHINE_EPOCHS,
-                        trainable_embeddings = trainable)
-buildings = list()
-buildings.append(1)
-buildings.append(5)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building2(experiment)
-test_redd_building1(experiment)
-
-print("#------------------------------------------------------------------------------------------------------------")
-dae = RNNDisaggregator()
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=False,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=WASHING_MACHINE_EPOCHS)
-buildings = list()
-buildings.append(1)
-buildings.append(5)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building2(experiment)
-test_redd_building1(experiment)
+#
+# DEVICE = "washing machine"
+#
+# dae = RNNEmbeddingsDisaggregator(WINDOW_WASHING_MACHINE, clustering_model, trainable)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=WASHING_MACHINE_EPOCHS,
+#                         trainable_embeddings = trainable)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(5)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building2(experiment)
+# test_redd_building1(experiment)
+#
+# print("#------------------------------------------------------------------------------------------------------------")
+# dae = RNNDisaggregator()
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=False,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=WASHING_MACHINE_EPOCHS)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(5)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building2(experiment)
+# test_redd_building1(experiment)
 
 DEVICE = "dish washer"
 
