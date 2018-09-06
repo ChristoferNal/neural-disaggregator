@@ -12,7 +12,7 @@ import pandas as pd
 import psutil
 
 EMBEDDINGS_CSV = 'embeddings/energy_embeddings_gmm.csv'
-TOKENIZATION_WINDOW = 10
+TOKENIZATION_WINDOW = 1
 
 class DAEEmbeddingsDisaggregator(DAEDisaggregator):
     def __init__(self, sequence_length, clustering_model):

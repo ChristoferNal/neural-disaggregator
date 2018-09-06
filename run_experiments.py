@@ -16,7 +16,6 @@ REDD = '../Datasets/REDD/redd.h5'
 UK_DALE = '../Datasets/UKDALE/ukdale.h5'
 UK_DALE_NAME = "ukdale"
 REDD_NAME = "redd"
-DEVICE = "kettle"
 
 WINDOW_KETTLE = 100
 WINDOW_MICROWAVE = 50
@@ -24,18 +23,18 @@ WINDOW_WASHING_MACHINE = 200
 WINDOW_DISH_WASHER = 100
 WINDOW_FIRDGE = 50
 
-KETTLE_EPOCHS = 130
-MICROWAVE_EPOCHS = 80
-DISHWASHER_EPOCHS = 130
-WASHING_MACHINE_EPOCHS = 200
-FRIDGE_EPOCHS = 110
-# KETTLE_EPOCHS = 15
-# MICROWAVE_EPOCHS = 15
-# DISHWASHER_EPOCHS = 15
-# WASHING_MACHINE_EPOCHS = 15
-# FRIDGE_EPOCHS = 15
+# KETTLE_EPOCHS = 130
+# MICROWAVE_EPOCHS = 80
+# DISHWASHER_EPOCHS = 130
+# WASHING_MACHINE_EPOCHS = 200
+# FRIDGE_EPOCHS = 110
+KETTLE_EPOCHS = 15
+MICROWAVE_EPOCHS = 15
+DISHWASHER_EPOCHS = 15
+WASHING_MACHINE_EPOCHS = 15
+FRIDGE_EPOCHS = 15
 
-SAVED_MODEL = "clustering_model/gmm.pkl"
+SAVED_MODEL = "clustering_model/clf.pkl"
 from sklearn.externals import joblib
 
 def test_ukdale_building5(exp):
@@ -62,11 +61,25 @@ def test_redd_building1(exp):
     exp.set_testing_window()
     exp.run_experiment()
 
-clustering_model = joblib.load(SAVED_MODEL)
-trainable = True
+def test_ukdale_buidling1_one_week(exp):
+    exp.set_test_params(test_dataset_path=UK_DALE, test_dataset_name=UK_DALE_NAME,
+                               test_building=1)
+    exp.set_testing_window(start="21-3-2014", end="30-3-2014")
+    exp.run_experiment()
 
-MODEL_NAME = "GRU"
-# dae = GRUEmbeddingsDisaggregator(WINDOW_KETTLE, clustering_model, trainable)
+
+
+clustering_model = joblib.load(SAVED_MODEL)
+
+trainable = True
+DEVICE = "fridge"
+MODEL_NAME = "GRU/signal2vec"
+END = "20-3-2014"
+START = "1-1-2014"
+
+
+
+# dae = GRUEmbeddingsDisaggregator(WINDOW_FIRDGE, clustering_model, trainable)
 # experiment = Experiment(train_dataset_name=UK_DALE_NAME,
 #                         name=MODEL_NAME,
 #                         disaggregator=dae,
@@ -77,15 +90,69 @@ MODEL_NAME = "GRU"
 #                         embeddings=True,
 #                         sample_period=6,
 #                         device=DEVICE,
-#                         epochs=KETTLE_EPOCHS,
+#                         epochs=2,
+#                         training_batch=128,
 #                         trainable_embeddings = trainable)
+#
+# experiment.train_model()
+# test_ukdale_buidling1_one_week(experiment)
+#
+# experiment.set_disag_filename()
+# experiment.save_diagram(True)
+
+MODEL_NAME = "GRU/plain"
+dae = GRUDisaggregator()
+experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+                        name=MODEL_NAME,
+                        disaggregator=dae,
+                        train_dataset_path=UK_DALE,
+                        train_building=1,
+                        start=START,
+                        end=END,
+                        embeddings=True,
+                        sample_period=6,
+                        device=DEVICE,
+                        epochs=3,
+                        training_batch=64,
+                        trainable_embeddings = trainable)
+
+experiment.train_model()
+test_ukdale_buidling1_one_week(experiment)
+
+experiment.set_disag_filename()
+experiment.save_diagram(True)
+
+
 # buildings = list()
 # buildings.append(1)
-# buildings.append(2)
-# buildings.append(3)
-# buildings.append(4)
+# # buildings.append(2)
+# # buildings.append(3)
+# # buildings.append(4)
 # experiment.train_model_across_buildings(buildings)
 # test_ukdale_building5(experiment)
+# experiment.save_diagram(True)
+
+
+# dae = DAEEmbeddingsDisaggregator(WINDOW_MICROWAVE, clustering_model)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         training_batch=16,
+#                         epochs=5, trainable_embeddings=True)
+# experiment.train_model()
+# test_ukdale_buidling1_one_week(experiment)
+#
+# experiment.set_disag_filename()
+# experiment.save_diagram(True)
+
+
 print("#------------------------------------------------------------------------------------------------------------")
 # dae = GRUDisaggregator()
 # experiment = Experiment(train_dataset_name=UK_DALE_NAME,
@@ -237,27 +304,27 @@ print("#------------------------------------------------------------------------
 # test_ukdale_building2(experiment)
 # test_redd_building1(experiment)
 
-DEVICE = "dish washer"
-
-dae = GRUEmbeddingsDisaggregator(WINDOW_DISH_WASHER, clustering_model, trainable)
-experiment = Experiment(train_dataset_name=UK_DALE_NAME,
-                        name=MODEL_NAME,
-                        disaggregator=dae,
-                        train_dataset_path=UK_DALE,
-                        train_building=1,
-                        start=START,
-                        end=END,
-                        embeddings=True,
-                        sample_period=6,
-                        device=DEVICE,
-                        epochs=DISHWASHER_EPOCHS,
-                        trainable_embeddings = trainable)
-buildings = list()
-buildings.append(1)
-buildings.append(2)
-experiment.train_model_across_buildings(buildings)
-test_ukdale_building5(experiment)
-test_redd_building1(experiment)
+# DEVICE = "dish washer"
+#
+# dae = GRUEmbeddingsDisaggregator(WINDOW_DISH_WASHER, clustering_model, trainable)
+# experiment = Experiment(train_dataset_name=UK_DALE_NAME,
+#                         name=MODEL_NAME,
+#                         disaggregator=dae,
+#                         train_dataset_path=UK_DALE,
+#                         train_building=1,
+#                         start=START,
+#                         end=END,
+#                         embeddings=True,
+#                         sample_period=6,
+#                         device=DEVICE,
+#                         epochs=DISHWASHER_EPOCHS,
+#                         trainable_embeddings = trainable)
+# buildings = list()
+# buildings.append(1)
+# buildings.append(2)
+# experiment.train_model_across_buildings(buildings)
+# test_ukdale_building5(experiment)
+# test_redd_building1(experiment)
 
 print("#------------------------------------------------------------------------------------------------------------")
 # dae = GRUDisaggregator()

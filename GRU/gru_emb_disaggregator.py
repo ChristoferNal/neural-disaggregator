@@ -7,8 +7,8 @@ from keras.utils import plot_model
 
 from GRU.grudisaggregator import GRUDisaggregator
 
-EMBEDDINGS_CSV = 'embeddings/energy_embeddings_gmm.csv'
-TOKENIZATION_WINDOW = 10
+EMBEDDINGS_CSV = 'embeddings/signal2vec.csv'
+TOKENIZATION_WINDOW = 1
 
 class GRUEmbeddingsDisaggregator(GRUDisaggregator):
     def __init__(self, sequence_length, clustering_model, trainable=False):
@@ -66,6 +66,8 @@ class GRUEmbeddingsDisaggregator(GRUDisaggregator):
         print(psutil.virtual_memory())
         print(psutil.swap_memory())
         X_batch = self.clustering_model.predict(X_batch)
+        X_batch = np.reshape(X_batch, (X_batch.shape[0], 1, 1))
+
         print(psutil.virtual_memory())
         print(psutil.swap_memory())
         self.model.fit(X_batch, Y_batch, batch_size=batch_size, epochs=epochs, shuffle=True)

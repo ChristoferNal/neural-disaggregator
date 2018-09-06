@@ -9,7 +9,7 @@ from nilmtk import DataSet, HDFDataStore
 
 class Experiment:
     def __init__(self, train_dataset_name, name, disaggregator, train_dataset_path, train_building, start, end,
-                 sample_period, device, epochs, embeddings=False, trainable_embeddings=False):
+                 sample_period, device, epochs, training_batch=128, embeddings=False, trainable_embeddings=False):
         self.__test_dataset_name = None
         self.__test_dataset = None
         self.__test_building = None
@@ -25,10 +25,13 @@ class Experiment:
         self.__sample_period = sample_period
         self.__meter_key = device
         self.__epochs = epochs
+        self.__training_batch = training_batch
         self.__train_dataset.set_window(start=start, end=end)
-        self.__train_folder_name = "{}/{}/{}/trainable_emb_{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name, train_building,
-                                                                          trainable_embeddings,
-                                                                          device, embeddings, epochs, start, end)
+        self.__train_folder_name = "{}/{}/{}/trainable_emb_{}/{}/{}_epochs{}_{}_{}".format(name, train_dataset_name,
+                                                                                           train_building,
+                                                                                           trainable_embeddings,
+                                                                                           device, embeddings, epochs,
+                                                                                           start, end)
         if not os.path.exists(self.__train_folder_name):
             os.makedirs(self.__train_folder_name)
 
@@ -49,7 +52,8 @@ class Experiment:
         train_meter = train_elec.submeters()[self.__meter_key]
         train_mains = train_elec.mains()
 
-        self.__model.train(train_mains, train_meter, epochs=self.__epochs, sample_period=self.__sample_period)
+        self.__model.train(train_mains, train_meter, epochs=self.__epochs, batch_size=self.__training_batch,
+                           sample_period=self.__sample_period)
 
         self.__model.export_model("{}/trained_model.h5".format(self.__train_folder_name))
         end = time.time()
@@ -60,6 +64,7 @@ class Experiment:
         print("training...")
         mainlist = list()
         meterlist = list()
+        # TODO: building is not used.
         for building in buildings:
             train_elec = self.__train_dataset.buildings[self.train_building].elec
             train_meter = train_elec.submeters()[self.__meter_key]
@@ -67,7 +72,8 @@ class Experiment:
             meterlist.append(train_meter)
             mainlist.append(train_mains)
 
-        self.__model.train_across_buildings(mainlist, meterlist, self.__epochs, sample_period=self.__sample_period)
+        self.__model.train_across_buildings(mainlist, meterlist, self.__epochs, batch_size=self.__training_batch,
+                                            sample_period=self.__sample_period)
         self.__model.export_model("{}/trained_model.h5".format(self.__train_folder_name))
         end = time.time()
         print("Train finished in: ", end - start, " seconds.")
